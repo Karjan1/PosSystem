@@ -1,8 +1,8 @@
 package com.karoljanowski.pizzeria.controler;
 
-import com.karoljanowski.pizzeria.dao.RoleDao;
 import com.karoljanowski.pizzeria.domain.User;
 import com.karoljanowski.pizzeria.domain.security.UserRole;
+import com.karoljanowski.pizzeria.service.RoleService;
 import com.karoljanowski.pizzeria.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,10 +21,10 @@ import java.util.Set;
 public class HomeControler {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @Autowired  // BAD PRACTICE. SHOULD CRRATE ROLESERVICE
-    private RoleDao roleDao;
+    @Autowired
+    private RoleService roleService;
 
     @RequestMapping("/")
     public String home(){
@@ -62,7 +62,7 @@ public class HomeControler {
             return "pages/signup";
         } else {
             Set<UserRole> userRoles = new HashSet<>();
-            userRoles.add(new UserRole(user, roleDao.findByName("ROLE_USER")));
+            userRoles.add(new UserRole(user, roleService.findByName("ROLE_USER")));
             userService.createUser(user, userRoles);
             return "redirect:/";
         }
